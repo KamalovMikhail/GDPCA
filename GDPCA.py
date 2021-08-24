@@ -11,7 +11,7 @@ def matrix_preprocessing(A, delta, sigma, S):
     ### matrix_preprocessing - This method provides Laplacian Regularisation of matrix A
     ###                        with reweighting by covariance matrix S.
     ### Input:
-    ### A - a symmetrix (adjacency/similarity) matrix (n x n), where n is the number of nodes (sp.spmatrix);
+    ### A - a symmetric (adjacency/similarity) matrix (n x n), where n is the number of nodes (sp.spmatrix);
     ### delta - a reweighting parameter (float in (0,1));
     ### sigma - the power for Laplacian Regularization  (float in [0, 0.5, 1]);
     ### S - a covariance matrix (n x n), (np.ndarray).
@@ -38,7 +38,7 @@ def PI(A, Z, Y, iter_, alpha):
     ### PI - Power Iteration.
     ### This is an iterative method for the numerical solution of the linear system.
     ### Input:
-    ### A - a symmetrix (adjacency/similarity) matrix (n x n), where n is the number of nodes (sp.spmatrix);
+    ### A - a symmetric (adjacency/similarity) matrix (n x n), where n is the number of nodes (sp.spmatrix);
     ### Z - an initialization of solution of the linear system (np.ndarray);
     ### Y - an availabel label matrix (n x k) (sp.spmatrix, np.ndarray);
     ### iter_ - the number of iterations (int);
@@ -64,7 +64,7 @@ def GMRES(A, Y, alpha, k, tol):
     ### https://epubs.siam.org/doi/abs/10.1137/0907058
     ### This is an iterative method for the numerical solution of the linear system.
     ### Input:
-    ### A - a symmetrix (adjacency/similarity) matrix (n x n), where n is the number of nodes (sp.spmatrix);
+    ### A - a symmetrixc (adjacency/similarity) matrix (n x n), where n is the number of nodes (sp.spmatrix);
     ### k - the number of classes (int);
     ### Y - an availabel label matrix (n x k) (sp.spmatrix, np.ndarray);
     ### tol - tolerace is the real value (float).
