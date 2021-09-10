@@ -4,6 +4,7 @@ import networkx as nx
 import scipy.sparse as sp
 from scipy.sparse.linalg.eigen.arpack import eigsh
 import sys
+from sklearn.neighbors import NearestNeighbors
 
 
 def parse_index_file(filename):
@@ -109,6 +110,28 @@ def normalize_adj(adj):
     d_inv_sqrt[np.isinf(d_inv_sqrt)] = 0.
     d_mat_inv_sqrt = sp.diags(d_inv_sqrt)
     return adj.dot(d_mat_inv_sqrt).transpose().dot(d_mat_inv_sqrt).tocoo()
+
+def generate_adj(X, metric='minkowski', n_neighbours=25):
+    ##############################################################################
+    ### generate_adj - The utility method for generation of Adjacency matrix.
+    ### Input:
+    ### X - is a matrix (n x d) of node features, where d is the number of features (np.ndarray);
+    ### metric - is a metric of distance between nodes for NearestNeighbors algorithm (string);
+    ### https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.DistanceMetric.html
+    ### n_neighbours - is the number of neighbours for NearestNeighbors algorithm (int);
+    ### Output:
+    ### A - is a symmetrixc (adjacency/similarity) matrix (n x n), where n is the number of nodes (np.ndarray);
+    ##############################################################################
+    nnodes = X.shape[0]
+    A = np.zeros((nnodes, nnodes))
+    nbrs = NearestNeighbors(n_neighbors=n_neighbours, metric=metric).fit(X)
+    ind_ =  0
+    for x in X:
+        _, indices = nbrs.kneighbors(x)
+        A[ind_, indices] = 1
+        A[indices, ind_ ] = 1
+        ind_ += 1
+    return A
 
 
 def preprocess_adj(adj):
