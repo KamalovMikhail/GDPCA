@@ -105,6 +105,7 @@ def GDPCA(X, A, Y, delta=1, sigma=1, alpha=0.9,
     ##############################################################################
     svd = TruncatedSVD(n_components=1, algorithm='randomized')
     nnodes = A.shape[0]
+    k = Y.shape[1]
 
     if np.isnan(MMx).all():
         Xn = np.copy(X)
@@ -120,6 +121,6 @@ def GDPCA(X, A, Y, delta=1, sigma=1, alpha=0.9,
         Z, time_ = PI(A=AHAT, Z=Y, Y=Y, iter_=iter_, alpha=alpha)
     else:
         print('GMRES')
-        Z, time_ = GMRES(A=rex, Y=Y, alpha=alpha, k=Y.shape[1], tol=tol)
+        Z, time_ = GMRES(A=rex, Y=Y, alpha=alpha, k=k, tol=tol)
     return Z, time_
 

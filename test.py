@@ -6,20 +6,33 @@ from sklearn.neighbors import NearestNeighbors
 
 
 def generate_adj(X, metric='minkowski', n_neighbours=25):
+    ##############################################################################
+    ### generate_adj - The utility method for generation of Adjacency matrix.
+    ### Input:
+    ### X - is a matrix (n x d) of node features, where d is the number of features (np.ndarray);
+    ### metric - is a metric of distance between nodes for NearestNeighbors algorithm (string);
+    ### https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.DistanceMetric.html
+    ### n_neighbours - is the number of neighbours for NearestNeighbors algorithm (int);
+    ### Output:
+    ### A - is a symmetrixc (adjacency/similarity) matrix (n x n), where n is the number of nodes (np.ndarray);
+    ##############################################################################
     nnodes = X.shape[0]
-    Af = np.zeros((nnodes, nnodes))
-    for feature in X_array:
-        nbrs = NearestNeighbors(n_neighbors=n_neighbours, metric=metric).fit(feature)
-        distances, indices = nbrs.kneighbors(feature)
-        for i in range(nnodes):
-            Af[i, indices[i]] = 1
-            Af[indices[i], i ] = 1
-    return Af
+    A = np.zeros((nnodes, nnodes))
+    nbrs = NearestNeighbors(n_neighbors=n_neighbours, metric=metric).fit(X)
+    ind_ =  0
+    for x in X:
+        _, indices = nbrs.kneighbors(x)
+        A[ind_, indices] = 1
+        A[indices, ind_ ] = 1
+        ind_ += 1
+    return A
 
 adj, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_data('citeseer')
-Af = adj.toarray()
-nnodes = Af.shape[0]
+#Af = adj.toarray()
 
+
+Af = generate_adj(features)
+nnodes = Af.shape[0]
 d = features.toarray().shape[1]
 # experiments with another similarity
 #MMCos = cosine_similarity(features.toarray()) / (d-1)
