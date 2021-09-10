@@ -2,6 +2,19 @@ from utils import *
 from GDPCA import GDPCA
 from sklearn.metrics.pairwise import  cosine_similarity , rbf_kernel
 from sklearn import metrics as m
+from sklearn.neighbors import NearestNeighbors
+
+
+def generate_adj(X, metric='minkowski', n_neighbours=25):
+    nnodes = X.shape[0]
+    Af = np.zeros((nnodes, nnodes))
+    for feature in X_array:
+        nbrs = NearestNeighbors(n_neighbors=n_neighbours, metric=metric).fit(feature)
+        distances, indices = nbrs.kneighbors(feature)
+        for i in range(nnodes):
+            Af[i, indices[i]] = 1
+            Af[indices[i], i ] = 1
+    return Af
 
 adj, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_data('citeseer')
 Af = adj.toarray()

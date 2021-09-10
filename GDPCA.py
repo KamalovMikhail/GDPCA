@@ -42,7 +42,7 @@ def PI(A, Z, Y, iter_, alpha):
     ### Z - an initialization of solution of the linear system (np.ndarray);
     ### Y - an availabel label matrix (n x k) (sp.spmatrix, np.ndarray);
     ### iter_ - the number of iterations (int);
-    ### alpha - a jump factor of Personalized pagerank (float in (0, 1)).
+    ### alpha - is a jump factor of Personalized pagerank (float in (0, 1)).
     ### Output:
     ### Z - solution of linear system (np.ndarray);
     ### time_ - computation time (float)
@@ -85,6 +85,24 @@ def GMRES(A, Y, alpha, k, tol):
 
 def GDPCA(X, A, Y, delta=1, sigma=1, alpha=0.9,
           svd_error=1e-03, iter_=10, tol=1e-03, MMx=np.NAN):
+    ##############################################################################
+    ### GDPCA - Graph diffusion & PCA.
+    ### This is a linear graph-based semi-supervised framework.
+    ### Input:
+    ### A - is a symmetrixc (adjacency/similarity) matrix (n x n), where n is the number of nodes (sp.spmatrix);
+    ### X - is a matrix (n x d) of node features, where d is the number of features (np.ndarray);
+    ### Y - is an availabel label matrix (n x k) (sp.spmatrix, np.ndarray);
+    ### delta - is a reweighting parameter (float in (0,1));
+    ### sigma - the power for Laplacian Regularization  (float in [0, 0.5, 1]);
+    ### alpha - is a jump factor of Personalized pagerank (float in (0, 1));
+    ### svd_error - is an acceptable error for random SVD (float significantly less then one);
+    ### iter_ - the number of iterations for PI method (int);
+    ### tol - tolerace is the real value for GMRES method (float);
+    ### MMx - is a covvariance matrix (n x n, np.ndarray);
+    ### Output:
+    ### Z - solution of linear system (np.ndarray);
+    ### time_ - computation time (float)
+    ##############################################################################
     svd = TruncatedSVD(n_components=1, algorithm='randomized')
     nnodes = A.shape[0]
 
@@ -99,9 +117,9 @@ def GDPCA(X, A, Y, delta=1, sigma=1, alpha=0.9,
     gamma = svd.singular_values_[0]
     if (1 + delta * (gamma + svd_error)) <= 1 / alpha:
         print('PI')
-        Z, tm = PI(A=AHAT, Z=Y, Y=Y, iter_=iter_, alpha=alpha)
+        Z, time_ = PI(A=AHAT, Z=Y, Y=Y, iter_=iter_, alpha=alpha)
     else:
         print('GMRES')
-        Z, tm = GMRES(A=rex, Y=Y, alpha=alpha, k=Y.shape[1], tol=tol)
-    return Z, tm
+        Z, time_ = GMRES(A=rex, Y=Y, alpha=alpha, k=Y.shape[1], tol=tol)
+    return Z, time_
 
