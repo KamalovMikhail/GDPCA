@@ -127,7 +127,8 @@ def generate_adj(X, metric='minkowski', n_neighbours=25):
     nbrs = NearestNeighbors(n_neighbors=n_neighbours, metric=metric).fit(X)
     ind_ =  0
     for x in X:
-        _, indices = nbrs.kneighbors(x)
+        #print(x)
+        _, indices = nbrs.kneighbors()
         A[ind_, indices] = 1
         A[indices, ind_ ] = 1
         ind_ += 1
