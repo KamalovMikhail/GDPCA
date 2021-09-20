@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 #### n_samples - the numebr of objects
 #### train_idx - the list of object indexes wit lalbels
 #####################################################
-nl = 20
+nl = 30
 digits = datasets.load_digits()
 n_samples = len(digits.images)
 features = digits.images.reshape((n_samples, -1))
@@ -35,7 +35,7 @@ for i in train_idx:
 #####################################################
 #adj, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_data('citeseer')
 #Af = adj.toarray()
-Af = generate_adj(np.array(features))
+Af = generate_adj(np.array(features), n_neighbours=7)
 #### Experiments with another similarity
 #MMCos = cosine_similarity(features.toarray()) / (d-1)
 #MMrbf = rbf_kernel(features.toarray())/(d - 1)
